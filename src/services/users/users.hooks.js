@@ -1,10 +1,15 @@
 'use strict';
 
+const ajv = require('ajv');
+
 const { authenticate }    = require('feathers-authentication').hooks;
-const { when, discard }   = require('feathers-hooks-common');
+const { when, discard, validateSchema }   = require('feathers-hooks-common');
 const { restrictToOwner } = require('feathers-authentication-hooks');
 
 const { hashPassword } = require('feathers-authentication-local').hooks;
+
+const schema = require('./users.schema');
+
 const restrict         = [
   authenticate('jwt'),
   restrictToOwner({
@@ -18,7 +23,10 @@ module.exports = {
     all   : [],
     find  : [authenticate('jwt')],
     get   : [...restrict],
-    create: [hashPassword()],
+    create: [
+      validateSchema(schema, ajv),
+      hashPassword(),
+    ],
     update: [...restrict, hashPassword()],
     patch : [...restrict, hashPassword()],
     remove: [...restrict],

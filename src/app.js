@@ -23,7 +23,7 @@ const authentication = require('./authentication');
 const rethinkdb      = require('./rethinkdb');
 const webpack        = require('./webpack');
 
-const { profiler, getProfile, getPending } = require('feathers-profiler');
+const { profiler } = require('feathers-profiler');
 
 const app = feathers();
 
@@ -36,8 +36,15 @@ app.use(compress());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-app.use(history());
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
+app.use(history({
+  rewrites: [
+    {
+      from: /(?:^\/api\/.+)|(?:^\/auth(?:entication)?)/,
+      to  : rule => rule.parsedUrl.pathname,
+    },
+  ],
+}));
 if (app.get('env') === 'development') app.configure(webpack);
 // Host the public folder
 app.use('/', feathers.static(app.get('public')));

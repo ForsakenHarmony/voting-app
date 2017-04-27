@@ -1,3 +1,7 @@
-/**
- * Created by ForsakenHarmony on 27/04/17.
- */
+module.exports = {
+  properties: {
+    email   : { type: 'string' },
+    password: { type: 'string' },
+  },
+  required  : ['email', 'password'],
+};

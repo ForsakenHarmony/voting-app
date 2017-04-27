@@ -1,9 +1,9 @@
 import * as actionTypes from '../constants/action-types';
 
-const jwt = JSON.parse(localStorage.getItem('feathers-jwt'));
+// const jwt = localStorage.getItem('feathers-jwt');
 
 const initialState = {
-  loggedin: Boolean(jwt),
+  loggedin: false,
 };
 
 export default function (state = initialState, action) {

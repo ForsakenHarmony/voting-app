@@ -6,6 +6,8 @@ const exclude = /(node_modules|bower_components)/;
 
 const dist = join(__dirname, '../public');
 
+const babel  = require('./babel');
+
 module.exports = (env) => {
   const ENV    = env || process.env.NODE_ENV || 'development';
   const isProd = ENV === 'production';
@@ -35,20 +37,22 @@ module.exports = (env) => {
     },
     module : {
       rules: [
+        // {
+        //   enforce: 'pre',
+        //   test   : /\.jsx?$/,
+        //   exclude,
+        //   loader : 'eslint-loader',
+        //   options: {
+        //     cache    : true,
+        //     quiet    : true,
+        //     emitError: false,
+        //   },
+        // },
         {
-          enforce: 'pre',
-          test   : /\.jsx?$/,
-          exclude,
-          loader : 'eslint-loader',
-          options: {
-            cache    : true,
-            quiet    : true,
-            emitError: false,
-          },
-        }, {
           test  : /\.jsx?$/,
           exclude,
           loader: 'babel-loader',
+          options: babel(isProd),
         }, {
           test  : /\.scss$/,
           loader: ExtractText.extract({
@@ -57,6 +61,11 @@ module.exports = (env) => {
                 loader: `css-loader?sourceMap=${!isProd}`,
               }, {
                 loader: 'postcss-loader',
+                options: {
+                  plugins: () => [
+                    require('autoprefixer')({ browsers: ['last 3 version'] })
+                  ],
+                },
               }, {
                 loader: 'resolve-url-loader',
               }, {

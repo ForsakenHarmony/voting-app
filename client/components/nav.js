@@ -2,14 +2,23 @@ import { Component } from 'preact';
 import cx from 'classnames';
 import { connect } from 'preact-redux';
 
-@connect(state => ({ url: state.routing.url }))
+@connect(state => ({ ...state.routing, ...state.user }))
 class Nav extends Component {
-  render({ url }, {}, {}) {
+  render({ url, loggedin }, {}, {}) {
     return (
       <nav className="nav has-shadow">
         <div className="nav-left">
           <Tab href="/" currentUrl={url}>Home</Tab>
         </div>
+        <div className="nav-center"></div>
+        { loggedin ? [
+        
+        ] : [
+          <div className="nav-right">
+            <Tab href="/login" currentUrl={url}>Log In</Tab>
+            <Tab href="/register" currentUrl={url}>Sign Up</Tab>
+          </div>,
+        ]}
       </nav>
     );
   }

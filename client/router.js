@@ -1,5 +1,3 @@
-'use strict';
-
 import { Component } from 'preact';
 
 import Router from 'preact-router';
@@ -12,10 +10,11 @@ import App from './containers/app';
 import NotFound from './containers/not-found';
 import Index from './containers/index';
 import Poll from './containers/poll';
+import Create from './containers/create-poll';
+import Login from './containers/login';
 
 class Page extends Component {
   onChange = ({ url }) => {
-    console.log(url);
     store.dispatch(actions.routeTo(url));
   };
   
@@ -25,6 +24,9 @@ class Page extends Component {
         <App>
           <Router onChange={this.onChange}>
             <Index path="/"/>
+            <Login path="/login"/>
+            <Login register path="/register"/>
+            <Create path="/new"/>
             <Poll path="/p/:id"/>
             <NotFound default path="/404"/>
           </Router>

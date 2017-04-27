@@ -5,18 +5,20 @@ module.exports = (isProd) => {
   
   const babelrc = {
     presets: [
-      [
-        'env',
-        {
-          modules: false,
-          exclude: ['transform-regenerator', 'transform-async-to-generator'],
-          targets,
-        },
-      ],
+      // [
+      //   'env',
+      //   {
+      //     modules: false,
+      //     exclude: ['transform-regenerator', 'transform-async-to-generator'],
+      //     targets,
+      //   },
+      // ],
     ],
     plugins: [
       'fast-async',
       'transform-decorators-legacy',
+      'transform-object-rest-spread',
+      'transform-class-properties',
       ['transform-react-jsx', { pragma: 'h' }],
     ],
     babelrc: false,
@@ -24,8 +26,6 @@ module.exports = (isProd) => {
   
   if (isProd) {
     babelrc.plugins.concat([
-      'transform-class-properties',
-      'transform-object-rest-spread',
     ]);
   }
   

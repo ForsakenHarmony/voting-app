@@ -1,10 +1,9 @@
-'use strict';
-
 import { render } from 'preact';
 
 import App from './router';
 
 if (process.env.NODE_ENV !== 'production') {
+  // require('debug').enable('*');
   require('preact/devtools');
 }
 

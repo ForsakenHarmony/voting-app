@@ -1,12 +1,17 @@
 import { Component } from 'preact';
 import cx from 'classnames';
+import { connect } from 'preact-redux';
+import { route } from 'preact-router';
 
 import Modal from './modal';
 
-import { post } from '../util/fetch';
+import { users, auth } from '../feathers';
+
+// import { post } from '../util/fetch';
 
 import * as actions from '../actions';
 
+@connect(state => state)
 class Login extends Component {
   handleLogin = async (e) => {
     e.preventDefault();
@@ -14,25 +19,16 @@ class Login extends Component {
     
     this.setLoading(true);
     const { email, password, register } = this.state;
+    const { dispatch }                  = this.props;
     
-    const url = register ? '/api/auth/register' : '/api/auth/login';
+    // const url = register ? '/api/auth/register' : '/api/auth/login';
     
-    try {
-      const result = await post(url, { email, password });
-      if (result.status !== 200) {
-        this.props.dispatch(actions.createMessage(
-          register
-            ? 'Email already in use'
-            : 'Incorrect email/password.'
-        ));
-        return;
-      }
-      const body = await result.json();
-      this.props.dispatch(actions.login(body.user));
-      this.setLoading(false);
-    } catch (e) {
-      console.error(e);
-      this.props.dispatch(actions.createMessage('An Error occurred, please try again.'));
+    console.log('LOGIN', register, email, password);
+    
+    if (register) {
+      dispatch(users.create({ email, password }));
+    } else {
+      dispatch(auth.create({ strategy: 'local', email, password }));
     }
   };
   
@@ -59,47 +55,63 @@ class Login extends Component {
     this.setState({ register: !this.state.register });
   };
   
-  render({}, { open, loading, email, password, register }) {
+  render({ users, auth, dispatch }, { open, loading, email, password, register }, {}) {
+    if (auth && auth.data && auth.data.accessToken) {
+      window.localStorage.setItem('feathers-jwt', auth.data.accessToken);
+      dispatch(actions.login());
+      route('/');
+    }
     return (
-      <span class="nav-item">
-        <button class="button is-primary" onClick={this.open}>Log In</button>
+      <span className="nav-item">
+        <button className="button is-light" onClick={this.open}>Log In</button>
         
         <Modal open={open} close={this.close}>
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">{register ? 'Register' : 'Log In'}</p>
-              <button class="delete" onClick={this.close}></button>
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <p className="modal-card-title">{register ? 'Register' : 'Log In'}</p>
+              <button className="delete" onClick={this.close}></button>
             </header>
-            <section class="modal-card-body">
+            <section className="modal-card-body">
               <form ref={this.formRef} onSubmit={this.handleLogin}>
-                <label class="label">Email</label>
-                <p class="control has-icon">
-                  <input type="email" name="email" class="input"
-                         placeholder="Email" required
-                         value={email} onChange={this.update}/>
-                  <span class="icon is-small"><i class="fa fa-envelope"/></span>
-                  <span class="help is-danger">This email is invalid</span>
-                </p>
-                <label class="label">Password</label>
-                <p class="control has-icon">
-                  <input type="password" class="input" name="password"
-                         placeholder="Password" required minLength={8}
-                         value={password} onChange={this.update}/>
-                  <span class="icon is-small"><i class="fa fa-lock"/></span>
-
-                  <span
-                    class="help is-danger">This password is invalid (min 8 chars)</span>
-                </p>
+                <div className="field">
+                  <label className="label">Email</label>
+                  <p className="control">
+                    <input required
+                         type="email"
+                         name="email"
+                         className="input"
+                         placeholder="Email"
+                         value={email}
+                         onChange={this.update}/>
+                    <span className="help is-danger">This email is invalid</span>
+                  </p>
+                </div>
+                <div className="field">
+                  <label className="label">Password</label>
+                  <p className="control">
+                    <input required
+                           type="password"
+                           className="input"
+                           name="password"
+                           placeholder="Password"
+                           minLength={8}
+                           value={password}
+                           onChange={this.update}/>
+                    <span className="help is-danger">
+                      This password is invalid (min 8 chars)
+                    </span>
+                  </p>
+                </div>
                 <button type="submit" style={{ display: 'none' }}></button>
               </form>
             </section>
-            <footer class="modal-card-foot">
-              <button class={cx('button is-success', loading && 'is-loading')}
-                      onClick={this.handleLogin}
-                      type="submit">{register ? 'Register' : 'Log In'}</button>
-              <button class="button" onClick={this.close}>Cancel</button>
+            <footer className="modal-card-foot">
+              <button className={cx('button is-success', loading && 'is-loading')}
+                      type="submit"
+                      onClick={this.handleLogin}>{register ? 'Register' : 'Log In'}</button>
+              <button className="button" onClick={this.close}>Cancel</button>
               <spacer style={{ flexGrow: 1 }}></spacer>
-              <button class="button is-pulled-right is-link"
+              <button className="button is-pulled-right is-link"
                       onClick={this.toggleMode}>{register ? 'Log In' : 'Register'}</button>
             </footer>
           </div>

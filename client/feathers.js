@@ -20,15 +20,16 @@ app.configure(socketio(socket))
      storage: window.localStorage,
    }));
 
-app.authenticate().then((response) => {
-  // store.dispatch(actions.login());
-  console.info('Feathers Client has Authenticated with the JWT access token!');
-  console.log(response);
-}).catch((error) => {
-  // store.dispatch(actions.logout());
-  console.info('We have not logged in with OAuth, yet.  This means there\'s no cookie storing the accessToken.  As a result, feathersClient.authenticate() failed.');
-  console.log(error);
-});
+// app.authenticate().then((response) => {
+//   console.info('Feathers Client has Authenticated with the JWT access token!');
+//   console.log(response);
+// }).catch((error) => {
+//   console.info('We have not logged in with OAuth, yet.  This means there\'s no cookie storing the accessToken.  As a result, feathersClient.authenticate() failed.');
+//   console.log(error);
+// });
+
+// try to login if auth token exists
+app.authenticate().catch(() => {});
 
 export default app;
 
