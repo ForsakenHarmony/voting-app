@@ -1,0 +1,52 @@
+@font-face {
+  font-family: 'fontello';
+  src: url('./fontello.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="fa-"]:before, [class*=" fa-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+.fa-lock:before { content: '\e800'; } /* '' */
+.fa-home:before { content: '\e801'; } /* '' */
+.fa-logout:before { content: '\e802'; } /* '' */
+.fa-refresh:before { content: '\e803'; } /* '' */
+.fa-envelope:before { content: '\f0e0'; } /* '' */
+.fa-terminal:before { content: '\f120'; } /* '' */
+.fa-trash:before { content: '\f1f8'; } /* '' */
+.fa-user-circle:before { content: '\f2bd'; } /* '' */
+
+@import "animation";
