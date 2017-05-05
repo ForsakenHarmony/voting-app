@@ -1,8 +1,18 @@
-@import "theme";
-//@import "icons/all";
+@charset "utf-8";
 
-html {
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+//@import "~material-design-lite/src/material-design-lite";
+@import "~material-design-lite/material.css";
+
+* {
+  font-family: 'Roboto', serif;
+}
+
+html, body {
   overflow-y: auto;
+  margin: 0;
+  padding: 0;
 }
 
 #app {
@@ -13,63 +23,23 @@ html {
 
 #main {
   flex: 1 0 auto;
+  //padding: 5vw;
 }
 
-.input:invalid:not(:placeholder-shown) {
-  border-color: $danger !important;
-
-  box-shadow: inset 0 -1px 0 $danger;
-
-  &.is-active,
-  &.is-focused,
-  &:active,
-  &:focus {
-    box-shadow: inset 0 -2px 0 $danger;
-  }
+.mdc-toolbar__title {
+  padding-left: 8px;
+  text-transform: capitalize;
 }
 
-.input:valid {
-  border-color: $success !important;
-
-  box-shadow: inset 0 -1px 0 $success;
-
-  &.is-active,
-  &.is-focused,
-  &:active,
-  &:focus {
-    box-shadow: inset 0 -2px 0 $success;
-  }
-
-  ~ .help {
-    visibility: hidden;
-  }
+.mdc-temporary-drawer__header-content {
+  color: #FFF;
 }
 
-.input:placeholder-shown {
-  ~ .help {
-    visibility: hidden;
-  }
-}
+//.mdc-toolbar__icon, .material-icons {
+//  color: #FFF;
+//}
 
-.nav-left {
-  float: left;
-  flex: none;
-}
-
-.nav-center {
-  flex-grow: 1;
-  @media (max-width: 300px) {
-    display: none;
-  }
-}
-
-.nav-right {
-  display: flex;
-  float: right;
-  flex: none;
-}
-
-.box.is-centered, .card.is-centered {
+.container {
   margin: 20px auto;
   max-width: 700px;
 
@@ -78,15 +48,67 @@ html {
   }
 }
 
-.card-footer-item {
-  &.is-loading {
-    color: transparent !important;
-    pointer-events: none;
-    &::after {
-      @include loader;
-      @include center(1em);
-      position: absolute !important;
-      top: auto;
+.login-container {
+  margin: 20px auto;
+  max-width: 400px;
+}
+
+.mdl-card {
+  &.centered {
+    display: block;
+    width: auto;
+    max-width: 600px;
+    margin: 20px auto;
+
+    @media (max-width: 640px) {
+      margin: 20px;
+    }
+
+    &.wide {
+      max-width: 800px;
     }
   }
+}
+
+#login form {
+  text-align: center;
+}
+
+button-bar,
+.mdl-card__actions.centered {
+  display: block;
+  padding: 10px;
+  text-align: center;
+}
+
+.mdl-navigation__link .material-icons {
+  color: rgba(0, 0, 0, .54);
+  width: 24px;
+  height: 24px;
+  margin-left: 0;
+  margin-right: 32px;
+}
+
+#create {
+  .mdl-textfield {
+    width: 100%;
+  }
+
+  .mdl-list__item {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .mdl-list__item .mdl-textfield {
+    width: 90%;
+  }
+}
+
+.floating-action-button {
+  position: fixed !important;
+  right: 14px;
+  bottom: 14px;
+  z-index: 500;
+  will-change: bottom;
+  transition: bottom .25s ease 50ms;
 }

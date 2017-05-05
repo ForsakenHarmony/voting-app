@@ -8,9 +8,6 @@ import reduxifyAuthentication from 'feathers-reduxify-authentication';
 
 import io from 'socket.io-client';
 
-// import store from './store';
-// import * as actions from '../actions';
-
 const socket = io();
 const app    = feathers();
 
@@ -29,7 +26,7 @@ app.configure(socketio(socket))
 // });
 
 // try to login if auth token exists
-app.authenticate().catch(() => {});
+// app.authenticate().catch(() => {});
 
 export default app;
 
@@ -38,12 +35,9 @@ const services = reduxifyServices(app, [
   'api/users',
   'api/polls',
   'api/votes',
-  'authentication',
 ]);
 
-const auth = reduxifyAuthentication(app,
-  { isUserAuthorized: user => user.isVerified }
-);
+const auth = reduxifyAuthentication(app);
 
 const users = services['api/users'];
 const polls = services['api/polls'];

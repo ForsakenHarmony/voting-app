@@ -53,7 +53,20 @@ app.use('/', feathers.static(app.get('public')));
 app.configure(hooks());
 app.configure(rethinkdb);
 app.configure(rest());
-app.configure(socketio());
+app.configure(socketio(
+  (io) => {
+    io.use((socket, next) => {
+      socket.feathers.ip = socket.conn.remoteAddress;
+      next();
+    });
+  }
+));
+
+app.use((req, res, next) => {
+  req.feathers.ip = req.ip;
+  
+  next();
+});
 
 app.configure(authentication);
 

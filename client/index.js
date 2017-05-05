@@ -1,5 +1,7 @@
 import { render } from 'preact';
 
+import 'material-design-lite/material';
+
 import App from './router';
 
 if (process.env.NODE_ENV !== 'production') {

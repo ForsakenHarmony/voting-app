@@ -6,11 +6,13 @@ const exclude = /(node_modules|bower_components)/;
 
 const dist = join(__dirname, '../public');
 
-const babel  = require('./babel');
+const babel = require('./babel');
 
 module.exports = (env) => {
   const ENV    = env || process.env.NODE_ENV || 'development';
   const isProd = ENV === 'production';
+  
+  const babelcfg = babel(isProd);
   
   return {
     entry  : {
@@ -21,6 +23,10 @@ module.exports = (env) => {
       vendor: [
         // pull these to a `vendor.js` file
         'preact',
+        'redux',
+        'preact-router',
+        'preact-mdl',
+        'preact-redux',
       ],
     },
     output : {
@@ -48,22 +54,23 @@ module.exports = (env) => {
         //     emitError: false,
         //   },
         // },
+        // just testing stuff
         {
-          test  : /\.jsx?$/,
+          test   : /\.jsx?$/,
           exclude,
-          loader: 'babel-loader',
-          options: babel(isProd),
+          loader : 'babel-loader',
+          options: babelcfg,
         }, {
-          test  : /\.scss$/,
+          test  : /\.s?css$/,
           loader: ExtractText.extract({
             use     : [
               {
                 loader: `css-loader?sourceMap=${!isProd}`,
               }, {
-                loader: 'postcss-loader',
+                loader : 'postcss-loader',
                 options: {
                   plugins: () => [
-                    require('autoprefixer')({ browsers: ['last 3 version'] })
+                    require('autoprefixer')({ browsers: ['last 3 version'] }),
                   ],
                 },
               }, {

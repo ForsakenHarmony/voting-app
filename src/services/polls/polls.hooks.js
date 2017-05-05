@@ -1,7 +1,12 @@
 'use strict';
 
-const { authenticate }    = require('feathers-authentication').hooks;
-const { restrictToOwner } = require('feathers-authentication-hooks');
+const { authenticate } = require('feathers-authentication').hooks;
+
+const {
+        restrictToOwner,
+        associateCurrentUser,
+        queryWithCurrentUser,
+      } = require('feathers-authentication-hooks');
 
 const restrict = [
   authenticate('jwt'),
@@ -14,9 +19,14 @@ const restrict = [
 module.exports = {
   before: {
     all   : [],
-    find  : [],
+    find  : [
+      queryWithCurrentUser({ idField: 'id', as: 'creator' }),
+    ],
     get   : [],
-    create: [authenticate('jwt')],
+    create: [
+      authenticate('jwt'),
+      associateCurrentUser({ idField: 'id', as: 'creator' }),
+    ],
     update: [...restrict],
     patch : [...restrict],
     remove: [...restrict],

@@ -2,15 +2,15 @@
 
 const ajv = require('ajv');
 
-const { authenticate }    = require('feathers-authentication').hooks;
-const { when, discard, validateSchema }   = require('feathers-hooks-common');
-const { restrictToOwner } = require('feathers-authentication-hooks');
+const { authenticate }                  = require('feathers-authentication').hooks;
+const { when, discard, validateSchema } = require('feathers-hooks-common');
+const { restrictToOwner }               = require('feathers-authentication-hooks');
 
 const { hashPassword } = require('feathers-authentication-local').hooks;
 
 const schema = require('./users.schema');
 
-const restrict         = [
+const restrict = [
   authenticate('jwt'),
   restrictToOwner({
     idField   : 'id',

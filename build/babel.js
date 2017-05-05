@@ -5,14 +5,14 @@ module.exports = (isProd) => {
   
   const babelrc = {
     presets: [
-      // [
-      //   'env',
-      //   {
-      //     modules: false,
-      //     exclude: ['transform-regenerator', 'transform-async-to-generator'],
-      //     targets,
-      //   },
-      // ],
+      [
+        'env',
+        {
+          modules: false,
+          exclude: ['transform-regenerator', 'transform-async-to-generator'],
+          targets,
+        },
+      ],
     ],
     plugins: [
       'fast-async',
@@ -23,11 +23,6 @@ module.exports = (isProd) => {
     ],
     babelrc: false,
   };
-  
-  if (isProd) {
-    babelrc.plugins.concat([
-    ]);
-  }
   
   return babelrc;
 };

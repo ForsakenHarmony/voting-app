@@ -12,7 +12,7 @@
       "jwt",
       "local"
     ],
-    "path": "/authentication",
+    "path": "/api/auth",
     "service": "api/users",
     "jwt": {
       "header": {
@@ -33,6 +33,7 @@
   },
   "rethinkdb": {
     "db": "voting_app",
+    "watch": false,
     "servers": [
       {
         "host": "localhost",

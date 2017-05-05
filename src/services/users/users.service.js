@@ -14,6 +14,7 @@ module.exports = function users() {
     name: 'users',
     Model,
     paginate,
+    watch: false,
   };
   
   // Initialize our service with any options it requires

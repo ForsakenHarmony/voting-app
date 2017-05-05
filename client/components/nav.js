@@ -1,41 +1,57 @@
 import { Component } from 'preact';
-import cx from 'classnames';
 import { connect } from 'preact-redux';
+import { route } from 'preact-router';
 
-@connect(state => ({ ...state.routing, ...state.user }))
-class Nav extends Component {
-  render({ url, loggedin }, {}, {}) {
+import {
+  Layout,
+  Button,
+  Icon,
+  Menu,
+} from 'preact-mdl';
+
+import { auth } from '../feathers';
+
+const mapDispatchToProps = dispatch => ({
+  handleLogout: () => {
+    console.log('logout');
+    dispatch(auth.logout());
+    route('/');
+  },
+});
+
+@connect(state => ({ ...state.routing, ...state.auth }), mapDispatchToProps)
+export default class Nav extends Component {
+  render({ url, isSignedIn, dispatch, toggleMenu }, {}, {}) {
+    const { Item } = Menu;
+    
     return (
-      <nav className="nav has-shadow">
-        <div className="nav-left">
-          <Tab href="/" currentUrl={url}>Home</Tab>
+      <Layout.Header manual>
+        <div className="mdl-layout-icon">
+          <Button icon onClick={toggleMenu}><Icon icon="menu"/></Button>
         </div>
-        <div className="nav-center"></div>
-        { loggedin ? [
-        
-        ] : [
-          <div className="nav-right">
-            <Tab href="/login" currentUrl={url}>Log In</Tab>
-            <Tab href="/register" currentUrl={url}>Sign Up</Tab>
-          </div>,
-        ]}
-      </nav>
+        <Layout.HeaderRow>
+          <Layout.Title>Voting App</Layout.Title>
+          <Layout.Spacer/>
+          {isSignedIn ? [
+            <Button fab
+                    accent
+                    class="floating-action-button"
+                    onClick={route.bind(null, '/new')}>
+              <Icon>add</Icon>
+            </Button>,
+            <Button icon id="person-menu"><Icon>person</Icon></Button>,
+            <Menu bottom-right for="person-menu">
+              <Item onClick={route.bind(null, '/me')}>Profile</Item>
+              <Item onClick={this.props.handleLogout}>Log Out</Item>
+            </Menu>,
+          ] : [
+            <Button icon
+                    onClick={route.bind(null, '/login')}>
+              <Icon>exit_to_app</Icon>
+            </Button>,
+          ]}
+        </Layout.HeaderRow>
+      </Layout.Header>
     );
   }
 }
-
-const Tab = ({ href, currentUrl, icon, children, onClick }) => (
-  <a href={href}
-     className={cx('nav-item', 'is-tab', href === currentUrl && 'is-active')}
-     onClick={onClick}>
-    { icon && (
-      <span className="icon is-marginless">
-        <i className={'fa fa-' + icon}/>
-      </span>
-    )}
-    { icon ? <span className="is-hidden-mobile" style={{ marginLeft: '0.5em' }}>
-      {children}</span> : children }
-  </a>
-);
-
-export default Nav;

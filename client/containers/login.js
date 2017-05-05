@@ -1,14 +1,18 @@
 import { Component } from 'preact';
-import cx from 'classnames';
 import { connect } from 'preact-redux';
+import { route } from 'preact-router';
+import { Button, Card, CardText, TextField } from 'preact-mdl';
 
-import { users, auth } from '../feathers';
+import { auth, users } from '../feathers';
 
-@connect(state => state)
+import emitter from '../util/emitter';
+
+@connect(({ auth, users }) => ({ auth, users }))
 class Login extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     if (!this.form.checkValidity()) return;
+    // return;
     
     this.setLoading(true);
     const { email, password }    = this.state;
@@ -25,92 +29,94 @@ class Login extends Component {
   
   handleLogin = async (dispatch, email, password) => {
     try {
-      const authReq = await dispatch(
+      await dispatch(
         auth.authenticate({ strategy: 'local', email, password })
       );
-      console.log(authReq);
-      this.setLoading(false);
+      route('/me');
     } catch (e) {
-      this.setLoading(false);
-      console.error(e);
+      this.setError('Username/Email incorrect');
     }
+    this.setLoading(false);
   };
   
   handleRegister = async (dispatch, email, password) => {
     try {
-      const authReq = await dispatch(
+      await dispatch(
         users.create({ email, password })
       );
-      console.log(authReq);
-      this.setLoading(false);
+      route('/login');
     } catch (e) {
-      this.setLoading(false);
-      console.error(e);
+      this.setError('User already exists');
     }
+    this.setLoading(false);
   };
   
-  setLoading = val => this.setState({ loading: val });
+  setLoading = (val) => {
+    this.setState({ loading: val });
+  };
   
   formRef = (el) => {
     this.form = el;
   };
   
+  snackbarRef = (c) => {
+    this.snackbar = c;
+  };
+  
   update = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
+    this.setState({ valid: this.form.checkValidity() });
   };
   
-  render({ users, auth, dispatch, register }, { loading, email, password }, {}) {
+  setError = (error) => {
+    emitter.emit('message', error);
+    this.setState({ error });
+  };
+  
+  switchState = () => {
+    route(this.props.register ? '/login' : '/register');
+  };
+  
+  render({ users, auth, dispatch, register }, { loading, email, password, valid, error }, {}) {
     return (
-      <div className="is-centered">
-        <div className="card is-centered">
-          <section className="card-content">
-            <form ref={this.formRef} onSubmit={this.handleSubmit}>
-              <div className="field">
-                <label className="label">Email</label>
-                <p className="control">
-                  <input required
-                         type="email"
-                         name="email"
-                         className="input"
-                         placeholder="Email"
-                         value={email}
-                         onChange={this.update}/>
-                  <span className="help is-danger">
-                    This email is invalid
-                  </span>
-                </p>
-              </div>
-              <div className="field">
-                <label className="label">Password</label>
-                <p className="control">
-                  <input required
-                         type="password"
-                         className="input"
-                         name="password"
-                         placeholder="Password"
-                         minLength={8}
-                         value={password}
-                         onChange={this.update}/>
-                  <span className="help is-danger">
-                    This password is invalid (min 8 chars)
-                  </span>
-                </p>
-              </div>
-              <button type="submit"
-                      style={{ display: 'none' }}></button>
-            </form>
-          </section>
-          <footer className="card-footer">
-            <p className="card-footer-item">
-              <button className={cx('button is-success', loading && 'is-loading')}
+      <Card shadow={2} class="centered" id="login">
+        <CardText>
+          <form ref={this.formRef} onSubmit={this.handleSubmit}>
+            <h4>{(register ? 'Sign Up' : 'Log In')}</h4>
+            <TextField floating-label
+                       required
+                       type="email"
+                       name="email"
+                       label="Email"
+                       value={email}
+                       onInput={this.update}/>
+            <TextField floating-label
+                       required
+                       minLength={8}
+                       type="password"
+                       name="password"
+                       label="Password"
+                       value={password}
+                       onInput={this.update}/>
+            <button type="submit" style={{ display: 'none' }}></button>
+            <button-bar>
+              <Button primary
+                      raised
+                      type="submit"
+                      disabled={!valid || loading}
                       onClick={this.handleSubmit}>
-                {register ? 'Register' : 'Log In'}
-              </button>
-            </p>
-          </footer>
-        </div>
-      </div>
+                {(register ? 'Sign Up' : 'Log In') + (loading ? '...' : '')}
+              </Button>
+            </button-bar>
+            <button-bar>
+              <Button accent onClick={this.switchState}>
+                {(register ? 'Already have an account?' : 'Need to sign up?')}
+              </Button>
+            </button-bar>
+          </form>
+        </CardText>
+      </Card>
     );
   }
 }

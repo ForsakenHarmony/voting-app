@@ -1,11 +1,11 @@
 'use strict';
 
 // Application hooks that run for every service
-// const logger = require('./hooks/logger');
+const iplogger = require('./hooks/ip-logger');
 
 module.exports = {
   before: {
-    all   : [],
+    all   : [iplogger()],
     find  : [],
     get   : [],
     create: [],
