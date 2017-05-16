@@ -10,6 +10,8 @@ const { hashPassword } = require('feathers-authentication-local').hooks;
 
 const schema = require('./users.schema');
 
+const removePolls = require('../../hooks/remove-polls-for-user');
+
 const restrict = [
   authenticate('jwt'),
   restrictToOwner({
@@ -44,7 +46,9 @@ module.exports = {
     create: [],
     update: [],
     patch : [],
-    remove: [],
+    remove: [
+      removePolls('api/polls'),
+    ],
   },
   
   error: {

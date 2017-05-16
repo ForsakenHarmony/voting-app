@@ -26,7 +26,6 @@ module.exports = (env) => {
         'redux',
         'preact-router',
         'preact-mdl',
-        'preact-redux',
       ],
     },
     output : {
@@ -37,8 +36,8 @@ module.exports = (env) => {
     resolve: {
       extensions: ['.js', '.jsx'],
       alias     : {
-        react      : 'preact',
-        'react-dom': 'preact',
+        react      : 'preact-compat',
+        'react-dom': 'preact-compat',
       },
     },
     module : {
@@ -54,7 +53,6 @@ module.exports = (env) => {
         //     emitError: false,
         //   },
         // },
-        // just testing stuff
         {
           test   : /\.jsx?$/,
           exclude,

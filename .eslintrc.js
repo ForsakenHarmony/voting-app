@@ -6,20 +6,20 @@ module.exports = {
   'plugins' : [
     'react',
     'jsx-a11y',
-    'import'
+    'import',
   ],
   'env'     : {
     'browser': true,
-    'es6'    : true
+    'es6'    : true,
   },
   'globals' : {
-    'ENV': true
+    'ENV': true,
   },
   'settings': {
     'react': {
       'pragma' : 'preact',
-      'version': '8.1.0'
-    }
+      'version': '8.1.0',
+    },
   },
   'rules'   : {
     'no-debugger': ENV === 'development' ? 'off' : 'error',
@@ -31,7 +31,7 @@ module.exports = {
         'imports'  : 'always-multiline',
         'exports'  : 'always-multiline',
         'functions': 'ignore'
-      }
+      },
     ],
     'operator-linebreak'          : ['error', 'before'],
     'import/prefer-default-export': 'off',

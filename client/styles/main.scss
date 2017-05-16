@@ -2,7 +2,6 @@
 
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500");
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-//@import "~material-design-lite/src/material-design-lite";
 @import "~material-design-lite/material.css";
 
 * {
@@ -79,6 +78,14 @@ button-bar,
   display: block;
   padding: 10px;
   text-align: center;
+}
+
+.mdl-card__supporting-text {
+  width: calc(100% - 32px) !important;
+}
+
+.spacer {
+  flex: 1 0 auto;
 }
 
 .mdl-navigation__link .material-icons {

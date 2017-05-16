@@ -1,7 +1,7 @@
 import { Component } from 'preact';
 
 import Router from 'preact-router';
-import { Provider } from 'preact-redux';
+import { Provider, connect } from 'react-redux';
 
 import store from './util/store';
 import * as actions from './actions';
@@ -34,18 +34,21 @@ export default class Page extends Component {
   }
 }
 
+@connect(state => ({ ...state.auth }))
 class RouterComponent extends Component {
-  render({ onChange }, {}, {}) {
+  render({ onChange, isSignedIn }, {}, {}) {
     return (
       <Router onChange={onChange}>
         <Index path="/"/>
-        <Login path="/login" key="/login"/>
-        <Login register path="/register" key="/register"/>
-        <Create path="/new"/>
-        <Profile path="/me"/>
+        {isSignedIn ? [
+          <Create path="/new"/>,
+          <Profile path="/me"/>,
+        ] : [
+          <Login key="/login" path="/login"/>,
+          <Login key="/register" path="/register" register/>,
+        ]}
         <Poll path="/p/:id"/>
-        <Poll res path="/p/:id/res"/>
-        <NotFound default path="/404"/>
+        <NotFound path="/404" default/>
       </Router>
     );
   }

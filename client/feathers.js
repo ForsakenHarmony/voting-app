@@ -30,6 +30,27 @@ app.configure(socketio(socket))
 
 export default app;
 
+app.on('authenticated', () => {
+  app.set('authenticated', true);
+});
+
+// app.hooks({
+//   before: {
+//     all: [
+//       (hook) => {
+//         if (app.get('authenticated')) {
+//           return hook;
+//         }
+//         return new Promise((res, rej) => {
+//           app.on('authenticated', () => {
+//             res(hook);
+//           });
+//         });
+//       },
+//     ],
+//   },
+// });
+
 // Expose Redux action creators and reducers for Feathers' services
 const services = reduxifyServices(app, [
   'api/users',

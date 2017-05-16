@@ -1,5 +1,5 @@
 import { Component } from 'preact';
-import { connect } from 'preact-redux';
+import { connect } from 'react-redux';
 import { route } from 'preact-router';
 
 import { Navigation as Nav, NavigationLink, Layout, Icon } from 'preact-mdl';
@@ -17,11 +17,11 @@ const mapDispatchToProps = dispatch => ({
 @connect(state => ({ ...state.routing, ...state.auth }), mapDispatchToProps)
 export default class SideBar extends Component {
   go = (href) => {
-    route(href);
     this.props.toggle();
+    route(href);
   };
   
-  render({ open, toggle, isSignedIn }, {}, {}) {
+  render({ open, isSignedIn }, {}, {}) {
     return (
       <Layout.Drawer js={false} className={open ? 'is-visible' : null}>
         <Layout.Title>

@@ -8,11 +8,14 @@ const {
         queryWithCurrentUser,
       } = require('feathers-authentication-hooks');
 
+const insertHasVoted     = require('../../hooks/insert-has-voted');
+const removeVotesForPoll = require('../../hooks/remove-votes-for-poll');
+
 const restrict = [
   authenticate('jwt'),
   restrictToOwner({
     idField   : 'id',
-    ownerField: 'id',
+    ownerField: 'creator',
   }),
 ];
 
@@ -35,11 +38,15 @@ module.exports = {
   after: {
     all   : [],
     find  : [],
-    get   : [],
+    get   : [
+      insertHasVoted('api/votes'),
+    ],
     create: [],
     update: [],
     patch : [],
-    remove: [],
+    remove: [
+      removeVotesForPoll('api/votes'),
+    ],
   },
   
   error: {

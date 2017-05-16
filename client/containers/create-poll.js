@@ -1,10 +1,12 @@
 import { Component } from 'preact';
-import { connect } from 'preact-redux';
+import { connect } from 'react-redux';
 import { route } from 'preact-router';
 
 import { Button, Card, CardText, TextField, List, Icon } from 'preact-mdl';
 
 import { polls } from '../feathers';
+
+import Spacer from '../components/spacer';
 
 @connect(state => state)
 class CreatePoll extends Component {
@@ -61,14 +63,17 @@ class CreatePoll extends Component {
     this.setState({ options });
   };
   
-  render({}, { title, options }, {}) {
+  render({ polls }, { title, options }, {}) {
     const { Item } = List;
+    
+    const { isError, isLoading } = polls;
     
     return (
       <Card shadow={4} class="centered" id="create">
         <Card.Title>
           <Card.TitleText>
             Create Poll
+            {isError && isError.name}
           </Card.TitleText>
         </Card.Title>
         <CardText>
@@ -86,6 +91,7 @@ class CreatePoll extends Component {
                   <TextField name={'o-' + o[0]}
                              value={o[1]}
                              onInput={this.updateItem}/>
+                  <Spacer/>
                   <Button icon
                           type="button"
                           onClick={this.removeItem.bind(null, o[0])}>
@@ -97,7 +103,7 @@ class CreatePoll extends Component {
                 <Button icon raised type="button" onClick={this.addItem}><Icon>add</Icon></Button>
               </button-bar>
             </List>
-            <Button primary raised type="submit">Create</Button>
+            <Button primary raised type="submit" disabled={isLoading}>Create{isLoading && '...'}</Button>
           </form>
         </CardText>
       </Card>

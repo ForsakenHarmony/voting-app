@@ -1,9 +1,9 @@
 'use strict';
 
-const { debug, iff, getItems } = require('feathers-hooks-common');
-const { associateCurrentUser } = require('feathers-authentication-hooks');
+const { iff, getItems, disallow } = require('feathers-hooks-common');
+const { associateCurrentUser }    = require('feathers-authentication-hooks');
 
-const logger = require('../../hooks/logger');
+const checkVoteUnique = require('../../hooks/check-vote-unique');
 
 module.exports = {
   before: {
@@ -34,10 +34,11 @@ module.exports = {
           hook.data.ip = hook.params.ip;
         }
       ),
+      checkVoteUnique(),
     ],
-    update: [],
-    patch : [],
-    remove: [],
+    update: [disallow('external')],
+    patch : [disallow('external')],
+    remove: [disallow('external')],
   },
   
   after: {

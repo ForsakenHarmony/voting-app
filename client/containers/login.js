@@ -1,5 +1,5 @@
 import { Component } from 'preact';
-import { connect } from 'preact-redux';
+import { connect } from 'react-redux';
 import { route } from 'preact-router';
 import { Button, Card, CardText, TextField } from 'preact-mdl';
 
@@ -17,8 +17,6 @@ class Login extends Component {
     this.setLoading(true);
     const { email, password }    = this.state;
     const { dispatch, register } = this.props;
-    
-    console.log('LOGIN', register, email, password);
     
     if (register) {
       this.handleRegister(dispatch, email, password);
@@ -57,10 +55,6 @@ class Login extends Component {
   
   formRef = (el) => {
     this.form = el;
-  };
-  
-  snackbarRef = (c) => {
-    this.snackbar = c;
   };
   
   update = (e) => {

@@ -1,5 +1,5 @@
 import { Component } from 'preact';
-import { connect } from 'preact-redux';
+import { connect } from 'react-redux';
 import { route } from 'preact-router';
 
 import {
@@ -13,7 +13,6 @@ import { auth } from '../feathers';
 
 const mapDispatchToProps = dispatch => ({
   handleLogout: () => {
-    console.log('logout');
     dispatch(auth.logout());
     route('/');
   },
@@ -21,7 +20,7 @@ const mapDispatchToProps = dispatch => ({
 
 @connect(state => ({ ...state.routing, ...state.auth }), mapDispatchToProps)
 export default class Nav extends Component {
-  render({ url, isSignedIn, dispatch, toggleMenu }, {}, {}) {
+  render({ isSignedIn, toggleMenu }, {}, {}) {
     const { Item } = Menu;
     
     return (

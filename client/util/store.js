@@ -5,12 +5,12 @@ import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 
 const middleware = [thunk, promise()];
-if (process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line global-require
-  const createLogger = require('redux-logger').createLogger;
-  const logger       = createLogger();
-  middleware.push(logger);
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   // eslint-disable-next-line global-require
+//   const createLogger = require('redux-logger').createLogger;
+//   const logger       = createLogger();
+//   middleware.push(logger);
+// }
 
 function configureStore(initialState) {
   return createStore(
