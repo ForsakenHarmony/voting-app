@@ -5,6 +5,7 @@ const rethinkdbdash = require('rethinkdbdash');
 module.exports = function rethinkdb() {
   const app      = this;
   const config   = app.get('rethinkdb');
+  config.servers[0].host = process.env.RETHINK_HOST || config.servers[0].host;
   const r        = rethinkdbdash(config);
   const oldSetup = app.setup;
   
